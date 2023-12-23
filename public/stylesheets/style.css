@@ -1,0 +1,41 @@
+body {
+  padding: 50px;
+  font-size: 14px; 
+  font-family: "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-image: url("background.jpg");
+}
+
+h1 {
+    font-weight: bold;
+}
+
+h2 {
+    font-weight: bold;
+}
+
+p {
+    font-size: 16px;
+}
+
+a {
+  color: #00B7FF;
+}
+
+select {
+  min-width: 300px;
+}
+
+.table {
+    table-layout: fixed;
+    width: 750px;
+}
+
+label {
+   font-size: 18px;
+}
+
+
+li {
+    font-size: 16px;
+}
+
