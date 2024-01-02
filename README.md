@@ -24,11 +24,8 @@ To start the application, run `npm install` in the project directory to install 
 
 ## Modules and Architecture ##
 
-For the frontend, `VueJS` along with `HTML` and `CSS` was used in order to display the
+- For the frontend, `VueJS` along with `HTML` and `CSS` was used in order to display the
 application, as well as the data from the server. 
-
-Since this is a single-page application, the `Axios` javascript library was used to issue `AJAX` requests to interface with the server.
-
-For the backend, the `Express` framework on top of `NodeJS` was used to handle connections from clients and send queries to the database.
-
-Amazon `AWS RDS` was used to host the `MySQL` database and `DynamoDB` as a `NoSQL` database.
+- Since this is a single-page application, the `Axios` javascript library was used to issue `AJAX` requests to interface with the server.
+- For the backend, the `Express` framework on top of `NodeJS` was used to handle connections from clients and send queries to the database.
+- Amazon `AWS RDS` was used to host the `MySQL` database and `DynamoDB` as a `NoSQL` database.
