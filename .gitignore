@@ -9,3 +9,5 @@ npm-debug.log
 !.elasticbeanstalk/*.global.yml
 
 routes/*.js
+
+.DS_Store
