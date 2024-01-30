@@ -61,7 +61,6 @@ var vm = new Vue({
     methods: {
         init: function() {
             var vm = this;
-            vm.header = "Create Player"
             vm.currStage = 1;
             vm.header = "Create or Login Player"
             vm.stage1 = true;

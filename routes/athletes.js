@@ -1,17 +1,17 @@
 var express = require('express');
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    host: 'cis550project-mysql.cbhtjg5oqf7i.us-east-2.rds.amazonaws.com',
-    user: 'apoth',
-    password: 'susandavidson',
-    port: '3306',
-    database: 'olympics'
+    host: 'database-1.c32yscgymlt6.us-east-1.rds.amazonaws.com',
+    user: 'evantao',
+    password: 'rubyonrails',
+    database: 'db1',
+    port: '3306'
 });
 var AWS = require("aws-sdk");
 AWS.config.update({
-    accessKeyId: "AKIAJ5WMW63CXERVBTCA",
-    secretAccessKey: "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",
-    "region": "us-east-2"
+    accessKeyId: "AKIAU6GDZDU357P3X2N4",
+    secretAccessKey: "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",
+    "region": "us-east-1"
 });
 var docClient = new AWS.DynamoDB.DocumentClient();
 var async = require('async');

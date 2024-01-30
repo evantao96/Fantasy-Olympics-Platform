@@ -1,11 +1,11 @@
 var express = require('express');
 var mysql = require('mysql');
 var connection = mysql.createConnection({
-    host: 'cis550project-mysql.cbhtjg5oqf7i.us-east-2.rds.amazonaws.com',
-    user: 'apoth',
-    password: 'susandavidson',
-    port: '3306',
-    database: 'olympics'
+    host: 'database-1.c32yscgymlt6.us-east-1.rds.amazonaws.com',
+    user: 'evantao',
+    password: 'rubyonrails',
+    database: 'db1',
+    port: '3306'
 });
 var async = require('async');
 var router = express.Router();
