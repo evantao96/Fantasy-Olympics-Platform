@@ -12,6 +12,15 @@ biographies from [Wikipedia](https://wikipedia.org/); and weather data from [Wea
 
 This game provides a platform for fans of the Olympics to engage with their favorite athletes and participate more in Olympics sporting events through fantasy play. The game also encourages Olympics fans to learn about lesser known athletes and events.
 
+## Schema ##
+
+Player 
++----+------+-----------+-------+
+| id | name | team_name | ready |
++----+------+-----------+-------+
+|  1 | Evan | evantao   |     1|
++----+------+-----------+-------+
+
 ## Testing ##
 
 To start the application, run `npm install` in the project directory to install any dependencies, then run: 

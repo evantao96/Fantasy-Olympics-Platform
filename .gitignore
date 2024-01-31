@@ -9,5 +9,7 @@ npm-debug.log
 !.elasticbeanstalk/*.global.yml
 
 routes/*.js
+MoviesCreateTable.js
 
 .DS_Store
+.env
