@@ -315,11 +315,10 @@ router.get('/weather', function(req, res, next) {
             connection.query(`SELECT Temp, Humidity from Weather
                 WHERE city=? AND country=? AND day=? AND month=? AND year=?`, [city, country, day, month, year],
                 function(err, rows, fields) {
-                    if (err) {
+                    if (err) { 
                         console.log(err);
                         res.send({ success: false })
                     } else {
-                        console.log(rows[0]);
                         temp = rows[0].Temp;
                         humd = rows[0].Humidity;
 

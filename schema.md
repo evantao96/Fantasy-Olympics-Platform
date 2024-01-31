@@ -52,3 +52,18 @@ Country
 +---------+--------------+------+-----+---------+----------------+
 
 CREATE TABLE Country (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, weather VARCHAR(255) NOT NULL);
+
+Weather
++----------+--------------+------+-----+---------+----------------+
+| Field    | Type         | Null | Key | Default | Extra          |
++----------+--------------+------+-----+---------+----------------+
+| id       | int          | NO   | PRI | NULL    | auto_increment |
+| city     | varchar(255) | NO   |     | NULL    |                |
+| country  | varchar(255) | NO   |     | NULL    |                |
+| day      | int          | NO   |     | NULL    |                |
+| month    | int          | NO   |     | NULL    |                |
+| year     | int          | NO   |     | NULL    |                |
+| temp     | decimal(5,2) | NO   |     | NULL    |                |
+| humidity | decimal(5,2) | NO   |     | NULL    |                |
++----------+--------------+------+-----+---------+----------------+
+CREATE Table Weather (id INT AUTO_INCREMENT PRIMARY KEY, city VARCHAR(255) NOT NULL, country VARCHAR(255) NOT NULL, day INT NOT NULL, month INT NOT NULL, year INT NOT NULL, temp DECIMAL(5, 2) NOT NULL, humidity DECIMAL(5, 2) NOT NULL); 

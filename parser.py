@@ -1,6 +1,7 @@
-from httplib2 import Http
+import requests
 from bs4 import BeautifulSoup
-import MySQLdb
+import mysql.connector
+from mysql.connector import Error
 import ast
 
 
@@ -18,9 +19,7 @@ class WeatherParser():
 
         for location, date in self.locations_dates:
             if i % (n/100) == 0:
-                print "{} done".format(float(i)/n*100)
-            # print "{} {}".format(location, date)
-            result[(location, date)] = self.__get_data(location, date)
+                result[(location, date)] = self.__get_data(location, date)
             i += 1
 
         return result
@@ -29,12 +28,8 @@ class WeatherParser():
         city, state = location
         month, day, year = date
 
-        h = Http(".cache")
-
-        _, html_doc = h.request("http://www.wunderground.com/cgi-bin/findweather/getForecast?airportorwmo=query&historytype=DailyHistory&backurl=%2Fhistory%2Findex.html&code={}%2C+{}&month={}&day={}&year={}".format(city, state, month, day, year),
-                                "GET")
-
-        return html_doc
+        page = requests.get("http://www.wunderground.com/cgi-bin/findweather/getForecast?airportorwmo=query&historytype=DailyHistory&backurl=%2Fhistory%2Findex.html&code={}%2C+{}&month={}&day={}&year={}".format(city, state, month, day, year))
+        return page.text
 
     def __get_data(self, location, date):
         html_doc = self.__get_html(location, date)
@@ -44,7 +39,7 @@ class WeatherParser():
         # table = soup.find(id='historyTable').tbody
 
         span = soup.find("span", text="Max Temperature")
-
+        
         if span is not None:
             value = span.parent.next_sibling.next_sibling.find(class_="wx-value")
             if value is not None:
@@ -65,13 +60,15 @@ class WeatherParser():
 
         return None
 
-db = MySQLdb.connect(
-        port=3306,
-        user="apoth",
-        passwd="susandavidson",
-        db="olympics",
-        host="cis550project-mysql.cbhtjg5oqf7i.us-east-2.rds.amazonaws.com"
-)
+try: 
+    connection = mysql.connector.connect(host='database-1.c32yscgymlt6.us-east-1.rds.amazonaws.com',
+        database='db1',user='evantao',password='rubyonrails')
+        
+    if connection.is_connected():
+        db_Info = connection.get_server_info()
+        print("Connected to MySQL Server version ", db_Info)
+except Error as e:
+    print("Error while connecting to MySQL", e)
 
 locations = [("Athens", "Greece"), ("London", "United Kingdom"), 
             ("Paris", "France"), ("St Louis", "United States"),
@@ -85,13 +82,13 @@ def insert(sql):
     """
     Executes SQL command, provided as input as a string
     """
-    cursor = db.cursor()
+    cursor = connection.cursor()
     try:
         cursor.execute(sql)
         db.commit()
-        print sql
+        print(sql)
     except:
-        print "exception"
+        print("exception")
     finally:
         cursor.close()
 
@@ -99,15 +96,15 @@ if __name__ == "__main__":
     locations_dates = []
     for location in locations:
         for month in [1, 6]:
-            for day in xrange(1, 29):
+            for day in range(1, 29):
                 date = (month, day, 2013)
                 locations_dates.append((location, date))
     # w = WeatherParser([(("Athens", "Greece"), (1, 24, 2015))])
     w = WeatherParser(locations_dates)
     data = w.parse()
-    print data
+    print(data)
 
-    for key, val in data.iteritems():
+    for key, val in data.items():
         if val is not None and "humidity" in val:
             location, date = key
             city, country = location
