@@ -1,9 +1,8 @@
 var AWS = require("aws-sdk"); 
 
 AWS.config.update({
-    accessKeyId: "AKIAU6GDZDU3SZAKDKZB",
-    secretAccessKey: "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",
-    "region": "us-east-1"
+    accessKeyId: `{process.env.ACCESS_KEY_ID}`,
+    secretAccessKey: `{process.env.SECRET_ACCESS_KEY}`,
 });
 
 var docClient = new AWS.DynamoDB.DocumentClient(); 
