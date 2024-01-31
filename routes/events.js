@@ -7,6 +7,14 @@ var connection = mysql.createConnection({
     database: 'db1',
     port: '3306'
 });
+var AWS = require("aws-sdk");
+
+AWS.config.update({
+    accessKeyId: "AKIAU6GDZDU3SZAKDKZB",
+    secretAccessKey: "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",
+    region: "us-east-1"
+});
+
 var async = require('async');
 var router = express.Router();
 

@@ -13,9 +13,9 @@ var router = express.Router();
 var AWS = require("aws-sdk");
 
 AWS.config.update({
-    accessKeyId: `{process.env.ACCESS_KEY_ID}`,
-    secretAccessKey: `{process.env.SECRET_ACCESS_KEY}`,
-    "region": "us-east-1"
+    accessKeyId: "AKIAU6GDZDU3SZAKDKZB",
+    secretAccessKey: "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",
+    region: "us-east-1"
 });
 
 var docClient = new AWS.DynamoDB.DocumentClient();
@@ -70,7 +70,6 @@ router.post('/', function(req, res, next) {
                             "passwd": crypto.createHash('md5').update(req.body.passwd).digest('hex')
                         }
                     };
-
                     docClient.put(params, function(err, data) {
                         if (err) {
                             console.error("Unable to create table. Error JSON:", JSON.stringify(err, null, 2));

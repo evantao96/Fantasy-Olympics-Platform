@@ -8,12 +8,14 @@ var connection = mysql.createConnection({
     port: '3306'
 });
 var AWS = require("aws-sdk");
+
 AWS.config.update({
-    accessKeyId: `{process.env.ACCESS_KEY_ID}`,
-    secretAccessKey: `{process.env.SECRET_ACCESS_KEY}`,
-    "region": "us-east-1"
+    accessKeyId: "AKIAU6GDZDU3SZAKDKZB",
+    secretAccessKey: "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",
+    region: "us-east-1"
 });
-var docClient = new AWS.DynamoDB.DocumentClient();
+
+var docClient = new AWS.DynamoDB.DocumentClient({ region: "us-east-1" });
 var async = require('async');
 var router = express.Router();
 
@@ -313,53 +315,57 @@ router.get('/weather', function(req, res, next) {
             connection.query(`SELECT Temp, Humidity from Weather
                 WHERE city=? AND country=? AND day=? AND month=? AND year=?`, [city, country, day, month, year],
                 function(err, rows, fields) {
-                    console.log(rows[0]);
-                    temp = rows[0].Temp;
-                    humd = rows[0].Humidity;
+                    if (err) {
+                        console.log(err);
+                        res.send({ success: false })
+                    } else {
+                        console.log(rows[0]);
+                        temp = rows[0].Temp;
+                        humd = rows[0].Humidity;
 
-                    docClient.update({
-                        TableName: "Game_State",
-                        Key: {
-                            "id": 1
-                        },
-                        UpdateExpression: "SET temperature = :temperature",
-                        ExpressionAttributeValues: {
-                            ":temperature": temp
-                        },
-                        ReturnValues: "ALL_NEW"
-                    }, function(err, data) {
-                        if (err) console.log(err);
                         docClient.update({
                             TableName: "Game_State",
                             Key: {
                                 "id": 1
                             },
-                            UpdateExpression: "SET humd = :humd",
+                            UpdateExpression: "SET temperature = :temperature",
                             ExpressionAttributeValues: {
-                                ":humd": humd
+                                ":temperature": temp
                             },
                             ReturnValues: "ALL_NEW"
                         }, function(err, data) {
                             if (err) console.log(err);
+                            docClient.update({
+                                TableName: "Game_State",
+                                Key: {
+                                    "id": 1
+                                },
+                                UpdateExpression: "SET humd = :humd",
+                                ExpressionAttributeValues: {
+                                    ":humd": humd
+                                },
+                                ReturnValues: "ALL_NEW"
+                            }, function(err, data) {
+                                if (err) console.log(err);
+                            });
                         });
-                    });
-                    res.send({
-                        success: true,
-                        location: {
-                            city: city,
-                            country: country
-                        },
-                        date: {
-                            day: day,
-                            month: month,
-                            year: year
-                        },
-                        weather: {
-                            temp: temp,
-                            humd: humd
-                        }
-                    });
-                });
+                        res.send({
+                            success: true,
+                            location: {
+                                city: city,
+                                country: country
+                            },
+                            date: {
+                                day: day,
+                                month: month,
+                                year: year
+                            },
+                            weather: {
+                                temp: temp,
+                                humd: humd
+                            }
+                        });
+                }});
         }
     });
 });
