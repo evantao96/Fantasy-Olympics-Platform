@@ -43,7 +43,7 @@
             <p>It is {{ weather.temp }}°F and {{ weather.humd }}% humidity</p>
         </div>
         <div v-if="currStage === 2">
-            <p>Pick up to 10 Athletes</p>
+            <p>Pick up to 10 athletes</p>
             <div>
                 <select2 :options="events" v-on:input="onEventChange">
                 </select2>
@@ -57,7 +57,7 @@
                     <div>{{ athlete.bio }}</div>
                 </div>
             </div>
-            <label for="public">Can we publish your name and scores to the Global Leaderboard?</label>
+            <label for="public">Can we publish your name and scores to the global leaderboard?</label>
             <input type="checkbox" id="public" v-model="public" />
             <br>
             <button v-on:click="getScores" :disabled="chosenAthletes.length === 0">Play!</button>
@@ -70,7 +70,7 @@
                 </li>
                 <h2>Congratulations!</h2>
             </ul>
-            <button v-on:click="tweetScore">Tweet Your Score!</button>
+            <button v-on:click="tweetScore">Tweet your score!</button>
             <table class="table">
                 <thead>
                     <th>Name</th>
