@@ -272,16 +272,16 @@ router.get('/weather', function(req, res, next) {
                 year = Math.ceil(Math.random() * 2) + 2013;
                 cities = [
                     ["Athens", "Greece"],
-                    // ["London", "United Kingdom"],
+                    ["London", "UK"],
                     ["Paris", "France"],
-                    // ["St Louis", "United States"],
+                    ["Istanbul", "Turkey"],
                     ["Stockholm", "Sweden"],
                     ["Amsterdam", "Netherlands"],
                     ["Berlin", "Germany"],
                     ["Helsinki", "Finland"],
                     ["Melbourne", "Australia"],
                     ["Rome", "Italy"],
-                    ["Seoul", "South Korea"],
+                    ["Seoul", "South-Korea"],
                     ["Barcelona", "Spain"],
                     ["Beijing", "China"]
                 ];
@@ -341,6 +341,7 @@ router.get('/weather', function(req, res, next) {
                                 if (err) console.log(err);
                             });
                         });
+                        let monthNames = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
                         res.send({
                             success: true,
                             location: {
@@ -348,7 +349,7 @@ router.get('/weather', function(req, res, next) {
                                 country: country
                             },
                             date: {
-                                month: month,
+                                month: monthNames[month],
                                 year: year
                             },
                             weather: {

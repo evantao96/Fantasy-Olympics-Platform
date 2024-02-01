@@ -38,9 +38,9 @@
         </div>
         <div v-if="location && date && weather && currStage === 2">
             <p v-if="currStage === 2">Welcome to the Fantasy Olympic Games!</p>
-            <p>Today is {{ date.month }}/{{ date.day }}/{{ date.year }}</p>
+            <p>It is {{ date.month }} of {{ date.year }}</p>
             <p>The games are hosted in scenic {{ location.city }}, {{ location.country }}</p>
-            <p>{{ weather.temp }}°F {{ weather.humd }}% humiditiy</p>
+            <p>It is {{ weather.temp }}°F and {{ weather.humd }}% humidity</p>
         </div>
         <div v-if="currStage === 2">
             <p>Pick up to 10 Athletes</p>

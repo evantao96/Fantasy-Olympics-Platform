@@ -78,8 +78,8 @@ if __name__ == "__main__":
 
     locations_dates = []
     for location in locations:
-        for year in range(2023, 2024):
-            for month in range(1, 12, 2):
+        for year in range(2014, 2016):
+            for month in [1, 6]:
                 date = (month, year)
                 locations_dates.append((location, date))
 
