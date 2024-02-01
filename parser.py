@@ -4,8 +4,6 @@ import mysql.connector
 from mysql.connector import Error
 import ast
 
-
-
 class WeatherParser():
 
     def __init__(self, locations_dates):
@@ -14,99 +12,84 @@ class WeatherParser():
     def parse(self):
         result = dict()
 
-        i = 0
-        n = len(self.locations_dates)
-
         for location, date in self.locations_dates:
-            if i % (n/100) == 0:
-                result[(location, date)] = self.__get_data(location, date)
-            i += 1
+            result[(location, date)] = self.__get_data(location, date)
 
         return result
 
     def __get_html(self, location, date):
         city, country = location
-        month, day, year = date
+        month, year = date
         page = requests.get("https://www.timeanddate.com/weather/{}/{}/historic?month={}&year={}".format(country, city, month, year))
         return page.content
 
     def __get_data(self, location, date):
         html_doc = self.__get_html(location, date)
         soup = BeautifulSoup(html_doc, 'html.parser')
-        print(soup.prettify())
         span = soup.find("th", text="Average")
-        print(span)
+
         if span is not None:
             value = span.parent
-            print(value)
         
             if value is not None:
                 temperature = value.find("td").text[:-3]
                 humidity = value.find("td", {"class": "sep"}).text[:-1]
-                print(temperature)
-                print(humidity)
 
-                span = soup.find("span", text="Average Humidity")
+                data = dict()
 
-                if span is not None:
-                    humidity = span.parent.next_sibling.next_sibling.text
+                data["temperature"] = temperature
+                data["humidity"] = humidity
 
-                    data = dict()
-
-                    if humidity.isdigit():
-                        data["temperature"] = temperature
-                        data["humidity"] = humidity
-
-                        return data
+                return data
 
         return None
-
-try: 
-    connection = mysql.connector.connect(host='database-1.c32yscgymlt6.us-east-1.rds.amazonaws.com',
-        database='db1',user='evantao',password='rubyonrails')
-        
-    if connection.is_connected():
-        db_Info = connection.get_server_info()
-        print("Connected to MySQL Server version ", db_Info)
-except Error as e:
-    print("Error while connecting to MySQL", e)
-
-locations = [("Athens", "Greece"), ("London", "UK"), 
-            ("Paris", "France"), ("Istanbul", "Turkey"),
-            ("Stockholm", "Sweden"), ("Amsterdam", "Netherlands"),
-            ("Berlin", "Germany"), ("Helsinki", "Finalnd"),
-            ("Melbourne", "Australia"), ("Rome", "Italy"),
-            ("Seoul", "South-Korea"), ("Barcelona", "Spain"),
-            ("Beijing", "China")]
 
 def insert(sql):
     """
     Executes SQL command, provided as input as a string
     """
-    cursor = connection.cursor()
     try:
         cursor.execute(sql)
-        db.commit()
-        print(sql)
+        connection.commit()
+        print("Successfully executed {}".format(sql))
     except:
-        print("exception")
-    finally:
-        cursor.close()
+        print("Error executing {}".format(sql))
 
 if __name__ == "__main__":
+
+    try: 
+        connection = mysql.connector.connect(host='database-1.c32yscgymlt6.us-east-1.rds.amazonaws.com',
+            database='db1',user='evantao',password='rubyonrails')
+            
+        if connection.is_connected():
+            db_Info = connection.get_server_info()
+            print("Connected to MySQL Server version", db_Info)
+            cursor = connection.cursor()
+    except Error as e:
+        print("Error while connecting to MySQL", e)
+
+    locations = [("Athens", "Greece"), ("London", "UK"), 
+                ("Paris", "France"), ("Istanbul", "Turkey"),
+                ("Stockholm", "Sweden"), ("Amsterdam", "Netherlands"),
+                ("Berlin", "Germany"), ("Helsinki", "Finalnd"),
+                ("Melbourne", "Australia"), ("Rome", "Italy"),
+                ("Seoul", "South-Korea"), ("Barcelona", "Spain"),
+                ("Beijing", "China")]
+
     locations_dates = []
     for location in locations:
-        for month in [1, 6]:
-            for day in range(1, 29):
-                date = (month, day, 2013)
+        for year in range(2023, 2024):
+            for month in range(1, 12, 2):
+                date = (month, year)
                 locations_dates.append((location, date))
+
     w = WeatherParser(locations_dates)
     data = w.parse()
-    print(data)
 
     for key, val in data.items():
         if val is not None and "humidity" in val:
             location, date = key
             city, country = location
-            month, day, year = date
-            insert("INSERT INTO Weather (City, Country, Day, Month, Year, Temp, Humidity) VALUES ('{}', '{}', {}, {}, {}, {}, {})".format(city, country, day, month, year, val["temperature"], val["humidity"]))
+            month, year = date
+            insert("INSERT INTO Weather (City, Country, Month, Year, Temp, Humidity) VALUES ('{}', '{}', {}, {}, {}, {})".format(city, country, month, year, val["temperature"], val["humidity"]))
+    connection.close()

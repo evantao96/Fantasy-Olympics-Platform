@@ -51,7 +51,6 @@ router.post('/', function(req, res, next) {
                             country: state.Item.country
                         },
                         date: {
-                            day: state.Item.day,
                             month: state.Item.month,
                             year: state.Item.year
                         },
@@ -263,14 +262,12 @@ router.get('/weather', function(req, res, next) {
             res.send({ success: false });
             return;
         } else {
-            var day;
             var month;
             var year;
             var city;
             var country;
 
             if (isEmpty(data)) {
-                day = Math.ceil(Math.random() * 28);
                 month = Math.random() > 0.5 ? 1 : 6;
                 year = Math.ceil(Math.random() * 2) + 2013;
                 cities = [
@@ -294,12 +291,11 @@ router.get('/weather', function(req, res, next) {
 
                 docClient.put({
                     TableName: "Game_State",
-                    Item: { "id": 1, "month": month, "day": day, "year": year, "city": city, "country": country }
+                    Item: { "id": 1, "month": month, "year": year, "city": city, "country": country }
                 }, function(err, data) {
                     if (err) { console.error("Error:", JSON.stringify(err, null, 2)); }
                 });
             } else {
-                day = data.Item.day;
                 month = data.Item.month;
                 year = data.Item.year;
                 city = data.Item.city;
@@ -307,13 +303,13 @@ router.get('/weather', function(req, res, next) {
             }
 
             connection.query(`SELECT Temp, Humidity from Weather
-                WHERE city=? AND country=? AND day=? AND month=? AND year=?`, [city, country, day, month, year],
+                WHERE city=? AND country=? AND month=? AND year=?`, [city, country, month, year],
                 function(err, rows, fields) {
                     if (err) { 
                         console.log(err);
                         res.send({ success: false });
                     } else if (rows[0] == undefined || rows[0] == null) {
-                        console.log(`Temperature of ${city}, ${country} on ${month}/${day}/${year} not found in the database`);
+                        console.log(`Temperature of ${city}, ${country} on ${month}/${year} not found in the database`);
                         res.send({ success: false });
                     } else {
                         temp = rows[0].Temp;
@@ -352,7 +348,6 @@ router.get('/weather', function(req, res, next) {
                                 country: country
                             },
                             date: {
-                                day: day,
                                 month: month,
                                 year: year
                             },

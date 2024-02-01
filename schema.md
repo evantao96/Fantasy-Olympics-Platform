@@ -60,10 +60,9 @@ Weather
 | id       | int          | NO   | PRI | NULL    | auto_increment |
 | city     | varchar(255) | NO   |     | NULL    |                |
 | country  | varchar(255) | NO   |     | NULL    |                |
-| day      | int          | NO   |     | NULL    |                |
 | month    | int          | NO   |     | NULL    |                |
 | year     | int          | NO   |     | NULL    |                |
-| temp     | decimal(5,2) | NO   |     | NULL    |                |
-| humidity | decimal(5,2) | NO   |     | NULL    |                |
+| temp     | int          | NO   |     | NULL    |                |
+| humidity | int          | NO   |     | NULL    |                |
 +----------+--------------+------+-----+---------+----------------+
-CREATE Table Weather (id INT AUTO_INCREMENT PRIMARY KEY, city VARCHAR(255) NOT NULL, country VARCHAR(255) NOT NULL, day INT NOT NULL, month INT NOT NULL, year INT NOT NULL, temp DECIMAL(5, 2) NOT NULL, humidity DECIMAL(5, 2) NOT NULL); 
+CREATE Table Weather (id INT AUTO_INCREMENT PRIMARY KEY, city VARCHAR(255) NOT NULL, country VARCHAR(255) NOT NULL, month INT NOT NULL, year INT NOT NULL, temp INT NOT NULL, humidity INT NOT NULL); 
