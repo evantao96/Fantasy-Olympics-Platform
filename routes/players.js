@@ -74,7 +74,7 @@ router.post('/', function(req, res, next) {
                         if (err) {
                             console.error("Unable to create table. Error JSON:", JSON.stringify(err, null, 2));
                         } else {
-                            console.log(`Successfully added ${req.body.name} of team ${req.body.teamName} to Player_Info`);
+                            console.log(`Successfully added ${req.body.name} of Team ${req.body.teamName} to Player_Info`);
                         }
                     });
                 }

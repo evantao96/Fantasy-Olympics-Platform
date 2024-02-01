@@ -313,7 +313,7 @@ router.get('/weather', function(req, res, next) {
                         console.log(err);
                         res.send({ success: false });
                     } else if (rows[0] == undefined || rows[0] == null) {
-                        console.log(`Temperature of ${city}, ${country} at ${month}/${day}/${year} not found in the database`);
+                        console.log(`Temperature of ${city}, ${country} on ${month}/${day}/${year} not found in the database`);
                         res.send({ success: false });
                     } else {
                         temp = rows[0].Temp;

@@ -25,27 +25,26 @@ class WeatherParser():
         return result
 
     def __get_html(self, location, date):
-        city, state = location
+        city, country = location
         month, day, year = date
-
-        # page = requests.get("http://www.wunderground.com/cgi-bin/findweather/getForecast?airportorwmo=query&historytype=DailyHistory&backurl=%2Fhistory%2Findex.html&code={}%2C+{}&month={}&day={}&year={}".format(city, state, month, day, year))
-        page = requests.get("https://www.wunderground.com/history/daily/{}/{}/date/{}-{}-{}".format(state, city, year, month, day))
-        return page.text
+        page = requests.get("https://www.timeanddate.com/weather/{}/{}/historic?month={}&year={}".format(country, city, month, year))
+        return page.content
 
     def __get_data(self, location, date):
         html_doc = self.__get_html(location, date)
-
         soup = BeautifulSoup(html_doc, 'html.parser')
-
-        # table = soup.find(id='historyTable').tbody
-
-        span = soup.find("span", text="High Temp")
-
+        print(soup.prettify())
+        span = soup.find("th", text="Average")
+        print(span)
         if span is not None:
-            print("Got here!")
-            value = span.parent.next_sibling.next_sibling.find(class_="wx-value")
+            value = span.parent
+            print(value)
+        
             if value is not None:
-                temperature = value.text
+                temperature = value.find("td").text[:-3]
+                humidity = value.find("td", {"class": "sep"}).text[:-1]
+                print(temperature)
+                print(humidity)
 
                 span = soup.find("span", text="Average Humidity")
 
@@ -72,13 +71,13 @@ try:
 except Error as e:
     print("Error while connecting to MySQL", e)
 
-locations = [("Athens", "GR"), ("Istanbul", "TR"), 
-            ("Paris", "FR"), ("St Louis", "United States"),
-            ("Stockholm", "SE"), ("Amsterdam", "Netherlands"),
-            ("Berlin", "DE"), ("Helsinki", "FI"),
-            ("Melbourne", "AU"), ("Rome", "IT"),
-            ("Seoul", "KR"), ("Barcelona", "ES"),
-            ("Beijing", "CN")]
+locations = [("Athens", "Greece"), ("London", "UK"), 
+            ("Paris", "France"), ("Istanbul", "Turkey"),
+            ("Stockholm", "Sweden"), ("Amsterdam", "Netherlands"),
+            ("Berlin", "Germany"), ("Helsinki", "Finalnd"),
+            ("Melbourne", "Australia"), ("Rome", "Italy"),
+            ("Seoul", "South-Korea"), ("Barcelona", "Spain"),
+            ("Beijing", "China")]
 
 def insert(sql):
     """
@@ -101,7 +100,6 @@ if __name__ == "__main__":
             for day in range(1, 29):
                 date = (month, day, 2013)
                 locations_dates.append((location, date))
-    # w = WeatherParser([(("Athens", "Greece"), (1, 24, 2015))])
     w = WeatherParser(locations_dates)
     data = w.parse()
     print(data)
