@@ -28,7 +28,8 @@ class WeatherParser():
         city, state = location
         month, day, year = date
 
-        page = requests.get("http://www.wunderground.com/cgi-bin/findweather/getForecast?airportorwmo=query&historytype=DailyHistory&backurl=%2Fhistory%2Findex.html&code={}%2C+{}&month={}&day={}&year={}".format(city, state, month, day, year))
+        # page = requests.get("http://www.wunderground.com/cgi-bin/findweather/getForecast?airportorwmo=query&historytype=DailyHistory&backurl=%2Fhistory%2Findex.html&code={}%2C+{}&month={}&day={}&year={}".format(city, state, month, day, year))
+        page = requests.get("https://www.wunderground.com/history/daily/{}/{}/date/{}-{}-{}".format(state, city, year, month, day))
         return page.text
 
     def __get_data(self, location, date):
@@ -38,9 +39,10 @@ class WeatherParser():
 
         # table = soup.find(id='historyTable').tbody
 
-        span = soup.find("span", text="Max Temperature")
-        
+        span = soup.find("span", text="High Temp")
+
         if span is not None:
+            print("Got here!")
             value = span.parent.next_sibling.next_sibling.find(class_="wx-value")
             if value is not None:
                 temperature = value.text
@@ -70,13 +72,13 @@ try:
 except Error as e:
     print("Error while connecting to MySQL", e)
 
-locations = [("Athens", "Greece"), ("London", "United Kingdom"), 
-            ("Paris", "France"), ("St Louis", "United States"),
-            ("Stockholm", "Sweden"), ("Amsterdam", "Netherlands"),
-            ("Berlin", "Germany"), ("Helsinki", "Finland"),
-            ("Melbourne", "Australia"), ("Rome", "Italy"),
-            ("Seoul", "South Korea"), ("Barcelona", "Spain"),
-            ("Beijing", "China")]
+locations = [("Athens", "GR"), ("Istanbul", "TR"), 
+            ("Paris", "FR"), ("St Louis", "United States"),
+            ("Stockholm", "SE"), ("Amsterdam", "Netherlands"),
+            ("Berlin", "DE"), ("Helsinki", "FI"),
+            ("Melbourne", "AU"), ("Rome", "IT"),
+            ("Seoul", "KR"), ("Barcelona", "ES"),
+            ("Beijing", "CN")]
 
 def insert(sql):
     """

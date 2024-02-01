@@ -306,18 +306,15 @@ router.get('/weather', function(req, res, next) {
                 country = data.Item.country;
             }
 
-            console.log(day);
-            console.log(month);
-            console.log(year);
-            console.log(city);
-            console.log(country);
-
             connection.query(`SELECT Temp, Humidity from Weather
                 WHERE city=? AND country=? AND day=? AND month=? AND year=?`, [city, country, day, month, year],
                 function(err, rows, fields) {
                     if (err) { 
                         console.log(err);
-                        res.send({ success: false })
+                        res.send({ success: false });
+                    } else if (rows[0] == undefined || rows[0] == null) {
+                        console.log(`Temperature of ${city}, ${country} at ${month}/${day}/${year} not found in the database`);
+                        res.send({ success: false });
                     } else {
                         temp = rows[0].Temp;
                         humd = rows[0].Humidity;
