@@ -1,6 +1,13 @@
-from httplib2 import Http
 from bs4 import BeautifulSoup
+import mysql.connector
+from mysql.connector import Error
+import requests
+import ast
 
+my_host = "database-1.c32yscgymlt6.us-east-1.rds.amazonaws.com"
+my_database = "db1"
+my_user = "evantao"
+my_password = "rubyonrails"
 
 class dbOlympicsParser():
 
@@ -17,8 +24,6 @@ class dbOlympicsParser():
 
     def __get_html(self, name):
         firstname,lastname = name;
-
-        h = Http(".cache")
 
         _, html_doc = h.request("http://databaseolympics.com/players/playerpage.htm?ilkid={}{}01".format(lastname[0:5],firstname[0:3]),
                                 "GET")
@@ -47,14 +52,6 @@ class dbOlympicsParser():
 
         return data
 
-db = MySQLdb.connect(
-        port=3306,
-        user="apoth",
-        passwd="susandavidson",
-        db="olympics",
-        host="cis550project-mysql.cbhtjg5oqf7i.us-east-2.rds.amazonaws.com"
-)
-
 def insert(sql):
     """
     Executes SQL command, provided as input as a string
@@ -72,7 +69,6 @@ if __name__ == "__main__":
     for location in locations:
         for year in xrange(1896, 2009, 4):
             locations_dates.append((location, date))
-    # w = WeatherParser([(("Athens", "Greece"), (1, 24, 2015))])
             w = WeatherParser(locations_dates)
             data = w.parse()
             print data
