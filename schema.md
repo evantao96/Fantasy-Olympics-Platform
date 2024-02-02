@@ -48,10 +48,9 @@ Country
 +---------+--------------+------+-----+---------+----------------+
 | id      | int          | NO   | PRI | NULL    | auto_increment |
 | name    | varchar(255) | NO   |     | NULL    |                |
-| weather | varchar(255) | NO   |     | NULL    |                |
 +---------+--------------+------+-----+---------+----------------+
 
-CREATE TABLE Country (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL, weather VARCHAR(255) NOT NULL);
+CREATE TABLE Country (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL);
 
 Weather
 +----------+--------------+------+-----+---------+----------------+
