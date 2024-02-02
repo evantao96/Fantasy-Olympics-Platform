@@ -9,18 +9,27 @@ my_host = "database-1.c32yscgymlt6.us-east-1.rds.amazonaws.com"
 my_database = "db1"
 my_user = "evantao"
 my_password = "rubyonrails"
+file = "./medalists.csv"
+column_num = 5
 
-countries = set()
+# Returns all combinations of locations, years and months as a list of tuples
+def generate_options(file): 
+    options = set()
+    with open(file, newline="") as csvfile:
+        reader = csv.reader(csvfile, delimiter=',', quotechar='"')
+        for row in reader:
+            options.add(row[column_num])
+    return options
 
 # Executes the SQL query according to the host, database, user and password
-def execute_query(city, country, month, year, temperature, humidity, host, database, user, password):
+def execute_query(country, host, database, user, password):
     try: 
         connection = mysql.connector.connect(host=host, database=database, user=user, password=password)
         if connection.is_connected():
             print("Connected to MySQL database")
             cursor = connection.cursor()
             try: 
-                sql_query = "INSERT INTO Country (Name, Country, Month, Year, Temp, Humidity) VALUES ('{}', '{}', {}, {}, {}, {})".format(city, country, month, year, temperature, humidity)
+                sql_query = "INSERT INTO Country (Name) VALUES ('{}')".format(country)
                 cursor.execute(sql_query)
                 connection.commit()
                 print("Successfully executed {}".format(sql_query))
@@ -31,14 +40,8 @@ def execute_query(city, country, month, year, temperature, humidity, host, datab
     except Error as e:
         print("Error while connecting to MySQL", e)
 
-def insert_country(country_name):
-    if country_name not in countries:
-        insert("INSERT INTO Country (Name, Weather) VALUES ('{}', 'wet')".format(country_name))
-        country.add(country_name)
-
-country_row = 5
-
-with open("medalists.csv", "rb") as csvfile:
-    reader = csv.reader(csvfile, delimiter=',', quotechar='"')
-    for row in reader:
-        insert_country(row[country_row])
+# Main method
+if __name__ == "__main__":
+    countries = generate_options(file)
+    for my_country in countries:
+        execute_query(my_country, my_host, my_database, my_user, my_password)
