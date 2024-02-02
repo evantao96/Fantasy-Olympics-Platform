@@ -268,8 +268,8 @@ router.get('/weather', function(req, res, next) {
             var country;
 
             if (isEmpty(data)) {
-                month = Math.random() > 0.5 ? 1 : 6;
-                year = Math.ceil(Math.random() * 2) + 2013;
+                month = Math.ceil(Math.random() * 12);
+                year = 2012;
                 cities = [
                     ["Athens", "Greece"],
                     ["London", "UK"],
