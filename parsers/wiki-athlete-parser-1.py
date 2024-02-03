@@ -50,13 +50,13 @@ def get_bio(name):
     name_parts = name.split(", ")
     if len(name_parts) > 1: 
         formatted_name = "{}_{}".format(name_parts[1], name_parts[0].lower().capitalize())
-    else: 
+    else:   
         formatted_name = name_parts[0].lower().capitalize()
     formatted_name = formatted_name.replace(" ", "_")
     formatted_name = remove_accents(formatted_name)
     html_doc = get_html_page(formatted_name)
     soup = BeautifulSoup(html_doc, "html.parser")
-    profile_table = soup.find("table", {"class": "infobox vcard"})
+    profile_table = soup.find("table", {"class": "infobox"})
     if profile_table is not None: 
         profile_bio = profile_table.findNextSibling("p").text
         if profile_bio is not None: 
