@@ -38,9 +38,10 @@ Athlete_Participates
 +------------+------+------+-----+---------+-------+
 | athlete_id | int  | NO   | PRI | NULL    |       |
 | event_id   | int  | NO   | PRI | NULL    |       |
+| medal      | int  | NO   |     | NULL    |       |
 +------------+------+------+-----+---------+-------+
 
-CREATE TABLE Athlete_Participates (athlete_id INT NOT NULL, event_id INT NOT NULL, PRIMARY KEY (athlete_id, event_id), FOREIGN KEY (athlete_id) REFERENCES Athlete(id), FOREIGN KEY (event_id) REFERENCES Event(id));
+CREATE TABLE Athlete_Participates (athlete_id INT NOT NULL, event_id INT NOT NULL, medal INT NOT NULL, PRIMARY KEY (athlete_id, event_id), FOREIGN KEY (athlete_id) REFERENCES Athlete(id), FOREIGN KEY (event_id) REFERENCES Event(id));
 
 Country
 +---------+--------------+------+-----+---------+----------------+

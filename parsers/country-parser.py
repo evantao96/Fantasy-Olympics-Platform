@@ -10,21 +10,24 @@ my_database = "db1"
 my_user = "evantao"
 my_password = "rubyonrails"
 file = "./medalists.csv"
-column_num = 5
+country_column = 5
 
-# Returns all combinations of locations, years and months as a list of tuples
+# Returns all countries in the csv file as a set
 def generate_options(file): 
     options = set()
     with open(file, newline="") as csvfile:
         reader = csv.reader(csvfile, delimiter=',', quotechar='"')
         for row in reader:
-            options.add(row[column_num])
+            options.add(row[country_column])
     return options
 
-# Executes the SQL query according to the host, database, user and password
+# Executes the SQL query according to the country, host, database, user and password
 def execute_query(country, host, database, user, password):
     try: 
-        connection = mysql.connector.connect(host=host, database=database, user=user, password=password)
+        connection = mysql.connector.connect(host=host, 
+                                             database=database, 
+                                             user=user, 
+                                             password=password)
         if connection.is_connected():
             print("Connected to MySQL database")
             cursor = connection.cursor()
