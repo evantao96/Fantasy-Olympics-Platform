@@ -37,7 +37,6 @@ def get_html_page(city, country, year, month):
 def get_temperature_and_humidity(city, country, year, month): 
     html_doc = get_html_page(city, country, year, month)
     soup = BeautifulSoup(html_doc, "html.parser")
-    #print(soup.prettify())
     block = soup.find("th", text="Average")
     if block is not None:
         value = block.parent

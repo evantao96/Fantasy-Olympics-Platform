@@ -1,31 +1,73 @@
-from httplib2 import Http
 from bs4 import BeautifulSoup
-import MySQLdb
-import unicodedata
-import string
+import mysql.connector
+from mysql.connector import Error
+import requests
+import ast
+import csv
 
-class WikiParser():
+my_host = "database-1.c32yscgymlt6.us-east-1.rds.amazonaws.com"
+my_database = "db1"
+my_user = "evantao"
+my_password = "rubyonrails"
 
+# Returns all combinations of locations, years and months as a list of tuples
+def generate_options(locations, start_year, end_year, start_month, end_month): 
+    options = []
+    for l in locations:
+        for y in range(start_year, end_year):
+            for m in range(start_month, end_month):
+                options.append((l, (y, m)))
+    return options
 
-    def __init__(self, names):
-        self.names = names
+# Returns the Wikipedia page of the athlete
+def get_html_page(first_name, last_name):
+    url = "https://en.wikipedia.org/wiki/{}_{}".format(first_name, last_name)
+    page = requests.get(url)
+    return page.content
 
-    def parse(self):
-        result = []
+# Gets the Wikipedia bio of the athlete
+def get_bio(first_name, last_name): 
+    html_doc = get_html_page(first_name, last_name)
+    soup = BeautifulSoup(html_doc, "html.parser")
+    block = soup.find("th", text="Average")
+    if block is not None:
+        value = block.parent
+        if value is not None:
+            temperature = value.find("td").text[:-3]
+            humidity = value.find("td", {"class": "sep"}).text[:-1]
+            return (temperature, humidity)
+        else:
+            print("Page has no HTML parent")
+    else:
+        print("Page has no bio section")
+    return {}
 
-        for aid, firstname, lastname in self.names:            
-            result.append(self.__get_data(aid, firstname, lastname))
+# Executes the SQL query according to the host, database, user and password
+def execute_query(bio, athlete_id, host, database, user, password):
+    try: 
+        connection = mysql.connector.connect(host=host, database=database, user=user, password=password)
+        if connection.is_connected():
+            print("Connected to MySQL database")
+            cursor = connection.cursor()
+            try: 
+                sql_query = "UPDATE Athlete SET bio = '{}' WHERE id={}".format(bio, athlete_id)
+                cursor.execute(sql_query)
+                connection.commit()
+                print("Successfully executed {}".format(sql_query))
+                cursor.close()
+                connection.close()
+            except:
+                print("Error executing {}".format(sql_query))
+    except Error as e:
+        print("Error while connecting to MySQL", e)
 
-        return result
+# Main method
+if __name__ == "__main__":
+    names = generate_options(locations, years[0], years[1], months[0], months[1])
+    for my_first_name, my_last_name in names:
+        my_bio = get_bio(my_first_name, my_last_name)
+        execute_query(my_bio, my_host, my_database, my_user, my_password)
 
-    def __get_html(self, firstname, lastname):
-        
-        h = Http(".cache")
-        if firstname == "":
-            _, html_doc = h.request("https://en.wikipedia.org/wiki/{}".format(lastname),"GET")
-        else: 
-            _, html_doc = h.request("https://en.wikipedia.org/wiki/{}_{}".format(firstname, lastname),"GET")
-        return html_doc
 
     def __get_data(self, aid, firstname, lastname):
         html_doc = self.__get_html(firstname, lastname)
@@ -51,26 +93,9 @@ class WikiParser():
         print aid, table
         return aid, table
 
-db = MySQLdb.connect(
-        port=3306,
-        user="apoth",
-        passwd="susandavidson",
-        db="olympics",
-        host="cis550project-mysql.cbhtjg5oqf7i.us-east-2.rds.amazonaws.com")
-
 def remove_accents(data): 
     return ''.join(x for x in unicodedata.normalize('NFKD', data) if x in string.ascii_letters).lower()
 
-def insert(sql):
-    """
-    Executes SQL command, provided as input as a string
-    """
-    cursor = db.cursor()
-    try:
-        cursor.execute(sql)
-        db.commit()
-    finally:
-        cursor.close()
 
 if __name__ == "__main__":
             
@@ -96,14 +121,5 @@ if __name__ == "__main__":
             lastname = lastname.capitalize()
 
             athlete_names.append((aid, firstname,lastname))
-        
-    finally:
-        cursor.close()
-        w = WikiParser(athlete_names)
-        data = w.parse()
-
-        for aid, val in data:
-            insertstr = "Update Athlete set bio = '{}' where id={};".format(val,aid) 
-            print insertstr
-            insert(insertstr)
+    
             
