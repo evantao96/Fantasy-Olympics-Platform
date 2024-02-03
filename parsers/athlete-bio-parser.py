@@ -23,7 +23,7 @@ def generate_options(host, database, user, password):
             print("Connected to MySQL database")
             cursor = connection.cursor()
             try: 
-                sql_query = "SELECT ID, Name FROM Athlete"
+                sql_query = "SELECT ID, Name FROM Athlete WHERE bio IS NULL"
                 cursor.execute(sql_query)
                 print("Successfully executed {}".format(sql_query))
                 for c in cursor: 
@@ -58,11 +58,13 @@ def get_bio(name):
     soup = BeautifulSoup(html_doc, "html.parser")
     profile_table = soup.find("table", {"class": "infobox"})
     if profile_table is not None: 
-        profile_bio = profile_table.findNextSibling("p").text
+        profile_bio = profile_table.findNextSibling("p")
         if profile_bio is not None: 
-            if len(profile_bio) > 250: 
-                profile_bio = profile_bio[:250] + "..."
-            return profile_bio
+            bio = profile_bio.text
+            if len(bio) > 250: 
+                bio = bio[:250] + "..."
+            bio = bio.replace("\"", "\\'\\'")
+            return bio
         else:
             print("Page for {} has no bio section".format(formatted_name))
     else:
@@ -77,7 +79,7 @@ def execute_query(bio, athlete_id, host, database, user, password):
             print("Connected to MySQL database")
             cursor = connection.cursor()
             try: 
-                sql_query = "UPDATE Athlete SET bio = '{}' WHERE id={}".format(bio, athlete_id)
+                sql_query = 'UPDATE Athlete SET bio = "{}" WHERE id={}'.format(bio, athlete_id)
                 cursor.execute(sql_query)
                 connection.commit()
                 print("Successfully executed {}".format(sql_query))
@@ -94,30 +96,3 @@ if __name__ == "__main__":
     for my_athlete_id, my_name in ids_names:
         my_bio = get_bio(my_name)
         execute_query(my_bio, my_athlete_id, my_host, my_database, my_user, my_password)
-
-# if __name__ == "__main__":
-            
-#     athlete_names = []
-#     cursor = db.cursor()
-#     try: 
-#         cursor.execute("Select id, name from Athlete;")
-#         db.commit()
-        
-#         for aname in cursor: 
-#             aid = aname[0]
-#             aname_arr = aname[1].split(", ")
-#             lastname = aname_arr[0]
-
-#             if len(aname_arr) > 1:
-#                 firstname = aname_arr[1]
-#             else: 
-#                 firstname = ""
-
-#             firstname = remove_accents(firstname.decode('utf-8'))
-#             firstname = firstname.capitalize()
-#             lastname = remove_accents(lastname.decode('utf-8'))
-#             lastname = lastname.capitalize()
-
-#             athlete_names.append((aid, firstname,lastname))
-    
-            
