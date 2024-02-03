@@ -65,4 +65,16 @@ Weather
 | temp     | int          | NO   |     | NULL    |                |
 | humidity | int          | NO   |     | NULL    |                |
 +----------+--------------+------+-----+---------+----------------+
+
 CREATE Table Weather (id INT AUTO_INCREMENT PRIMARY KEY, city VARCHAR(255) NOT NULL, country VARCHAR(255) NOT NULL, month INT NOT NULL, year INT NOT NULL, temp INT NOT NULL, humidity INT NOT NULL); 
+
+Player_Drafts_Athlete
++------------+------+------+-----+---------+-------+
+| Field      | Type | Null | Key | Default | Extra |
++------------+------+------+-----+---------+-------+
+| athlete_id | int  | NO   | PRI | NULL    |       |
+| event_id   | int  | NO   | PRI | NULL    |       |
+| player_id  | int  | NO   | PRI | NULL    |       |
++------------+------+------+-----+---------+-------+
+
+CREATE TABLE Player_Drafts_Athlete (athlete_id INT NOT NULL, event_id INT NOT NULL, player_id INT NOT NULL, PRIMARY KEY (athlete_id, event_id, player_id), FOREIGN KEY (athlete_id) REFERENCES Athlete(id), FOREIGN KEY (event_id) REFERENCES Event(id), FOREIGN KEY (player_id) REFERENCES Player(id));
