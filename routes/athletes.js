@@ -78,7 +78,6 @@ var getAthletes = function(id, callback) {
         OR country_id = 'RUS' OR country_id = 'NOR' OR country_id = 'DEN'
         OR country_id = 'ROU' OR country_id = 'POL' OR country_id = 'KOR'
         OR country_id = 'ESP')
-        AND bio <> 'N/A'
         AND indAthlete.id NOT IN ( SELECT athlete_id FROM Player_Drafts_Athlete )`, [id],
         function(err, athletes, fields) {
             connection.query(`SELECT name FROM Event WHERE id = ?`, [id], function(err, rows, fields) {
