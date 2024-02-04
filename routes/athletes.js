@@ -115,7 +115,7 @@ router.post('/scores', function(req, res, next) {
                 }, function(err) {
                     if (err) {
                         console.log(err.error);
-                        connection.query(`SELECT name FROM indAthlete WHERE id=?`, [err.athleteId], function(err, results) {
+                        connection.query(`SELECT name FROM Athlete WHERE id=?`, [err.athleteId], function(err, results) {
                             if (err) {
                                 res.send({ success: false });
                             } else {
@@ -218,11 +218,10 @@ router.post('/scores', function(req, res, next) {
 
 var getScore = function(ids, callback) {
 
-    console.log(temp);
-    console.log(humd);
+    console.log("Calling getScore")
 
     connection.query(`SELECT p.medal, a.name, c.weather, e.name as ename 
-        FROM indAthlete a 
+        FROM Athlete a 
         INNER JOIN Athlete_Participates p
         ON p.athlete_id=a.id
         INNER JOIN Country c
@@ -230,6 +229,7 @@ var getScore = function(ids, callback) {
         INNER JOIN Event e
         ON e.id=p.event_id
         WHERE athlete_id=? AND event_id=?`, [ids.athleteId, ids.eventId], function(err, rows, fields) {
+        console.log(rows)
         var medal = rows[0].medal;
         var points = Math.ceil(Math.random() * (medal * 10 + 5)) + 5;
 

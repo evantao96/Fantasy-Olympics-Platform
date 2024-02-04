@@ -53,7 +53,10 @@ def get_temperature_and_humidity(city, country, year, month):
 # Executes the SQL query according to the host, database, user and password
 def execute_query(city, country, month, year, temperature, humidity, host, database, user, password):
     try: 
-        connection = mysql.connector.connect(host=host, database=database, user=user, password=password)
+        connection = mysql.connector.connect(host=host, 
+                                             database=database, 
+                                             user=user, 
+                                             password=password)
         if connection.is_connected():
             print("Connected to MySQL database")
             cursor = connection.cursor()
