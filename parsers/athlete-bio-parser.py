@@ -23,7 +23,7 @@ def generate_options(host, database, user, password):
             print("Connected to MySQL database")
             cursor = connection.cursor()
             try: 
-                sql_query = "SELECT ID, Name FROM Athlete WHERE bio IS NULL"
+                sql_query = "SELECT ID, Name FROM Athlete"
                 cursor.execute(sql_query)
                 print("Successfully executed {}".format(sql_query))
                 for c in cursor: 
@@ -61,8 +61,6 @@ def get_bio(name):
         profile_bio = profile_table.findNextSibling("p")
         if profile_bio is not None: 
             bio = profile_bio.text
-            if len(bio) > 250: 
-                bio = bio[:250] + "..."
             bio = bio.replace("\"", "\\'\\'")
             return bio
         else:
