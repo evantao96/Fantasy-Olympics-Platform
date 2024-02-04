@@ -285,10 +285,7 @@ var vm = new Vue({
                 console.log(response.data);
                 if (response.data.success) {
                     vm.players = response.data.players;
-                    vm.finished = vm.players[vm.players.length - 1].score !== undefined ||
-                        vm.players.filter(function(el) {
-                            return el.score !== undefined;
-                        }).length === 0;
+                    vm.finished = true; 
                 } else {
                     vm.error = true;
                     vm.error_message = "Error retrieving scores";

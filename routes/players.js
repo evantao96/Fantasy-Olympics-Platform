@@ -117,10 +117,8 @@ router.get('/scores', function(req, res, next) {
     docClient.scan({ TableName: 'Player_Info' }, function(err, data) {
         if (err) console.log(err);
         else {
-            console.log('Got here first');
             data.Items.sort(sortScores);
             console.log(data);
-            console.log('Got here second');
             res.send({ success: true, players: data.Items })
         }
     });
