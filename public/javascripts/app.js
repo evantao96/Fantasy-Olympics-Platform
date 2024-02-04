@@ -142,6 +142,7 @@ var vm = new Vue({
                     vm.location = response.data.location;
                     vm.date = response.data.date;
                     vm.weather = response.data.weather;
+                    console.log(vm.weather);
                 } else {
                     vm.error = true;
                     vm.error_message = "Could not get weather"

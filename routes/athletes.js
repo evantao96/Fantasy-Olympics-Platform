@@ -231,15 +231,7 @@ var getScore = function(ids, callback) {
         var medal = rows[0].medal;
         var points = Math.ceil(Math.random() * (medal * 10 + 5)) + 5;
 
-        var clim;
-
-        if ((temp / 60.1) > (humd / 69.5)) {
-            if (temp > 60.1) clim = 'hot';
-            else clim = 'cold';
-        } else {
-            if (humd > 69.5) clim = 'wet';
-            else clim = 'dry';
-        }
+        var clim = getClimate(temp, humd);
 
         if (rows[0].climate == clim) {
             points += Math.ceil(Math.random() * 5);
@@ -251,7 +243,19 @@ var getScore = function(ids, callback) {
     });
 }
 
-
+var getClimate = function(temp, humd) {
+    if ((temp / 60.1) > (humd / 69.5)) {
+        if (temp > 60.1) 
+            return 'hot';
+        else 
+            return 'cold';
+    } else {
+        if (humd > 69.5) 
+            return 'wet';
+        else 
+            return 'dry';
+    }
+}
 
 router.get('/weather', function(req, res, next) {
     docClient.get({ TableName: "Game_State", Key: { 'id': 1 } }, function(err, data) {
@@ -339,7 +343,9 @@ router.get('/weather', function(req, res, next) {
                                 if (err) console.log(err);
                             });
                         });
-                        let monthNames = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"}
+                        let monthNames = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"};
+                        let clim = getClimate(temp, humd);
+                        console.log(clim); 
                         res.send({
                             success: true,
                             location: {
@@ -352,7 +358,8 @@ router.get('/weather', function(req, res, next) {
                             },
                             weather: {
                                 temp: temp,
-                                humd: humd
+                                humd: humd, 
+                                clim: clim
                             }
                         });
                 }});

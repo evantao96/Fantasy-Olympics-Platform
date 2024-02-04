@@ -40,7 +40,7 @@
             <p v-if="currStage === 2">Welcome to the Fantasy Olympic Games!</p>
             <p>It is {{ date.month }} of {{ date.year }}</p>
             <p>The games are hosted in scenic {{ location.city }}, {{ location.country }}</p>
-            <p>It is {{ weather.temp }}°F and {{ weather.humd }}% humidity</p>
+            <p>It is a {{weather.clim }} climate today of {{ weather.temp }}°F and {{ weather.humd }}% humidity</p>
         </div>
         <div v-if="currStage === 2">
             <p>Pick up to 10 athletes</p>
