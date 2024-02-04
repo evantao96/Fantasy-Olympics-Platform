@@ -302,11 +302,6 @@ router.get('/weather', function(req, res, next) {
                 if (err) { console.error("Error:", JSON.stringify(err, null, 2)); }
             });
 
-            // month = data.Item.month;
-            // year = data.Item.year;
-            // city = data.Item.city;
-            // country = data.Item.country;
-
             connection.query(`SELECT Temp, Humidity from Weather
                 WHERE city=? AND country=? AND month=? AND year=?`, [city, country, month, year],
                 function(err, rows, fields) {
