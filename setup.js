@@ -13,25 +13,25 @@ dynamoDB
     AttributeDefinitions: [
       {
         AttributeName: "name",
-        AttributeType: "S",
+        AttributeType: "S"
       },
       {
         AttributeName: "team_name",
-        AttributeType: "S",
+        AttributeType: "S"
       }
     ],
     KeySchema: [
       {
         AttributeName: "name",
-        KeyType: "HASH",
+        KeyType: "HASH"
       },
       {
         AttributeName: "team_name",
-        KeyType: "RANGE",
+        KeyType: "RANGE"
       }
     ],
     BillingMode: "PAY_PER_REQUEST",
-    TableName: "Player_Info",
+    TableName: "Player_Info"
   })
   .promise()
   .then(data => console.log("Success!", data))
@@ -42,17 +42,38 @@ dynamoDB
     AttributeDefinitions: [
       {
         AttributeName: "id",
-        AttributeType: "N",
+        AttributeType: "N"
       }
     ],
     KeySchema: [
       {
         AttributeName: "id",
-        KeyType: "HASH",
+        KeyType: "HASH"
       },
     ],
     BillingMode: "PAY_PER_REQUEST",
-    TableName: "Game_State",
+    TableName: "Game_State"
+  })
+  .promise()
+  .then(data => console.log("Success!", data))
+  .catch(console.error)
+
+dynamoDB
+  .createTable({
+    AttributeDefinitions: [
+      {
+        AttributeName: "rank",
+        AttributeType: "N"
+      }
+    ],
+    KeySchema: [
+      {
+        AttributeName: "rank",
+        KeyType: "HASH"
+      },
+    ],
+    BillingMode: "PAY_PER_REQUEST",
+    TableName: "Leaderboard"
   })
   .promise()
   .then(data => console.log("Success!", data))

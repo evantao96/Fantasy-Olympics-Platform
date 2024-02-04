@@ -218,8 +218,6 @@ router.post('/scores', function(req, res, next) {
 
 var getScore = function(ids, callback) {
 
-    console.log("Calling getScore")
-
     connection.query(`SELECT p.medal, a.name, c.climate, e.name as ename 
         FROM Athlete a 
         INNER JOIN Athlete_Participates p
