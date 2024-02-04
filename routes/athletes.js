@@ -66,9 +66,9 @@ router.post('/', function(req, res, next) {
 });
 
 var getAthletes = function(id, callback) {
-    connection.query(`SELECT id, name, bio FROM indAthlete
+    connection.query(`SELECT id, name, bio FROM Athlete
         INNER JOIN Athlete_Participates
-        ON indAthlete.id=Athlete_Participates.athlete_id
+        ON Athlete.id=Athlete_Participates.athlete_id
         WHERE Athlete_Participates.event_id= ? AND
         (country_id = 'USA'
         OR country_id = 'URS' OR country_id = 'GBR' OR country_id = 'FRA'
@@ -78,7 +78,8 @@ var getAthletes = function(id, callback) {
         OR country_id = 'RUS' OR country_id = 'NOR' OR country_id = 'DEN'
         OR country_id = 'ROU' OR country_id = 'POL' OR country_id = 'KOR'
         OR country_id = 'ESP')
-        AND indAthlete.id NOT IN ( SELECT athlete_id FROM Player_Drafts_Athlete )`, [id],
+        AND bio <> 'N/A'
+        AND Athlete.id NOT IN ( SELECT athlete_id FROM Player_Drafts_Athlete )`, [id],
         function(err, athletes, fields) {
             connection.query(`SELECT name FROM Event WHERE id = ?`, [id], function(err, rows, fields) {
                 callback(err, { eventId: id, eventName: rows[0].name, athletes: athletes });
