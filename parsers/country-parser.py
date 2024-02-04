@@ -43,14 +43,14 @@ def generate_options(file):
             options.add(row[country_column])
     return options
 
-def get_climate(country):
-    if country in climates: 
-        return climates[country]
+def get_climate(country_id):
+    if country_id in climates: 
+        return climates[country_id]
     else:
         return "N/A"
 
-# Executes the SQL query according to the country, host, database, user and password
-def execute_query(country, climate, host, database, user, password):
+# Executes the SQL query according to the country ID, host, database, user and password
+def execute_query(country_id, climate, host, database, user, password):
     try: 
         connection = mysql.connector.connect(host=host, 
                                              database=database, 
@@ -60,7 +60,7 @@ def execute_query(country, climate, host, database, user, password):
             print("Connected to MySQL database")
             cursor = connection.cursor()
             try: 
-                sql_query = "INSERT INTO Country (Name, Climate) VALUES ('{}', '{}')".format(country, climate)
+                sql_query = "INSERT INTO Country (ID, Climate) VALUES ('{}', '{}')".format(country_id, climate)
                 cursor.execute(sql_query)
                 connection.commit()
                 print("Successfully executed {}".format(sql_query))
@@ -74,6 +74,6 @@ def execute_query(country, climate, host, database, user, password):
 # Main method
 if __name__ == "__main__":
     countries = generate_options(file)
-    for my_country in countries:
-        my_climate = get_climate(my_country)
-        execute_query(my_country, my_climate, my_host, my_database, my_user, my_password)
+    for my_country_id in countries:
+        my_climate = get_climate(my_country_id)
+        execute_query(my_country_id, my_climate, my_host, my_database, my_user, my_password)

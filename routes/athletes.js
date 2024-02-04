@@ -220,7 +220,7 @@ var getScore = function(ids, callback) {
 
     console.log("Calling getScore")
 
-    connection.query(`SELECT p.medal, a.name, c.weather, e.name as ename 
+    connection.query(`SELECT p.medal, a.name, c.climate, e.name as ename 
         FROM Athlete a 
         INNER JOIN Athlete_Participates p
         ON p.athlete_id=a.id
@@ -243,7 +243,7 @@ var getScore = function(ids, callback) {
             else clim = 'dry';
         }
 
-        if (rows[0].weather = clim) {
+        if (rows[0].climate == clim) {
             points += Math.ceil(Math.random() * 5);
         } else {
             points += Math.floor(Math.random() * 5) - 2;
