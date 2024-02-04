@@ -118,7 +118,6 @@ router.get('/scores', function(req, res, next) {
         if (err) console.log(err);
         else {
             data.Items.sort(sortScores);
-            console.log(data);
             res.send({ success: true, players: data.Items })
         }
     });
@@ -128,37 +127,26 @@ router.get('/scores/clear', function(req, res, next) {
     docClient.scan({ TableName: 'Player_Info' }, function(err, data) {
         if (err) console.log(err);
         else {
-            console.log(data);
 
-            // Only clear player scores if there is a score to clear
-            if (data.Items.filter(function(el) {
-                    return el.score !== undefined;
-                }).length > 0) {
-                for (var i = 0; i < data.ScannedCount; i++) {
-                    var player = data.Items[i];
-                    console.log(player);
-                    var params = {
-                        TableName: "Player_Info",
-                        Key: {
-                            "name": player.name,
-                            "team_name": player.team_name
-                        },
-                        UpdateExpression: "REMOVE score",
-                        ReturnValues: "ALL_NEW"
-                    };
-                    docClient.update(params, function(err, data) {
-                        if (err) console.log(err);
-                    });
-                }
-
-                docClient.delete({ TableName: "Game_State", Key: { id: 1 } }, function(err, data) {
+            for (var i = 0; i < data.ScannedCount; i++) {
+                let player = data.Items[i]; 
+                docClient.delete({
+                    TableName: 'Player_Info',
+                    Key: { 
+                        "name": player.name,
+                        "team_name": player.team_name
+                    }
+                }, function(err, data) {
                     if (err) console.log(err);
                 });
-
-                connection.query(`DELETE FROM Player_Drafts_Athlete`, function(err, res) {
-                    if (err) console.log(err);
-                })
             }
+            docClient.delete({ TableName: "Game_State", Key: { id: 1 } }, function(err, data) {
+                if (err) console.log(err);
+            });
+
+            connection.query(`DELETE FROM Player_Drafts_Athlete`, function(err, res) {
+                if (err) console.log(err);
+            })
 
             res.send({ success: true });
         }

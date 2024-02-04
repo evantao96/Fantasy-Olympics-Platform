@@ -270,6 +270,8 @@ router.get('/weather', function(req, res, next) {
             var country;
 
             if (isEmpty(data)) {
+
+                console.log("Game State has been reset");
                 month = Math.ceil(Math.random() * 12);
                 year = 2012;
                 cities = [
@@ -345,7 +347,6 @@ router.get('/weather', function(req, res, next) {
                         });
                         let monthNames = {1: "January", 2: "February", 3: "March", 4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October", 11: "November", 12: "December"};
                         let clim = getClimate(temp, humd);
-                        console.log(clim); 
                         res.send({
                             success: true,
                             location: {
