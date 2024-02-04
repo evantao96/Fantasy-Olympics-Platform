@@ -269,42 +269,43 @@ router.get('/weather', function(req, res, next) {
             var city;
             var country;
 
-            if (isEmpty(data)) {
+            month = Math.ceil(Math.random() * 12);
+            year = 2012;
+            cities = [
+                ["Athens", "Greece"],
+                ["London", "UK"],
+                ["Paris", "France"],
+                ["Istanbul", "Turkey"],
+                ["Stockholm", "Sweden"],
+                ["Amsterdam", "Netherlands"],
+                ["Berlin", "Germany"],
+                ["Helsinki", "Finland"],
+                ["Melbourne", "Australia"],
+                ["Rome", "Italy"],
+                ["Seoul", "South-Korea"],
+                ["Barcelona", "Spain"],
+                ["Beijing", "China"]
+            ];
+            cityCountry = cities[Math.floor(Math.random() * cities.length)];
+            city = cityCountry[0];
+            country = cityCountry[1];
 
-                console.log("Game State has been reset");
-                month = Math.ceil(Math.random() * 12);
-                year = 2012;
-                cities = [
-                    ["Athens", "Greece"],
-                    ["London", "UK"],
-                    ["Paris", "France"],
-                    ["Istanbul", "Turkey"],
-                    ["Stockholm", "Sweden"],
-                    ["Amsterdam", "Netherlands"],
-                    ["Berlin", "Germany"],
-                    ["Helsinki", "Finland"],
-                    ["Melbourne", "Australia"],
-                    ["Rome", "Italy"],
-                    ["Seoul", "South-Korea"],
-                    ["Barcelona", "Spain"],
-                    ["Beijing", "China"]
-                ];
-                cityCountry = cities[Math.floor(Math.random() * cities.length)];
-                city = cityCountry[0];
-                country = cityCountry[1];
+            console.log(month);
+            console.log(year);
+            console.log(city);
+            console.log(country);
 
-                docClient.put({
-                    TableName: "Game_State",
-                    Item: { "id": 1, "month": month, "year": year, "city": city, "country": country }
-                }, function(err, data) {
-                    if (err) { console.error("Error:", JSON.stringify(err, null, 2)); }
-                });
-            } else {
-                month = data.Item.month;
-                year = data.Item.year;
-                city = data.Item.city;
-                country = data.Item.country;
-            }
+            docClient.put({
+                TableName: "Game_State",
+                Item: { "id": 1, "month": month, "year": year, "city": city, "country": country }
+            }, function(err, data) {
+                if (err) { console.error("Error:", JSON.stringify(err, null, 2)); }
+            });
+
+            // month = data.Item.month;
+            // year = data.Item.year;
+            // city = data.Item.city;
+            // country = data.Item.country;
 
             connection.query(`SELECT Temp, Humidity from Weather
                 WHERE city=? AND country=? AND month=? AND year=?`, [city, country, month, year],
