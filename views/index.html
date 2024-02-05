@@ -9,6 +9,7 @@
     <script src="https://code.jquery.com/jquery-3.7.1.slim.min.js"
   integrity="sha256-kmHvs0B+OpCW5GVHUNjv9rOmY0IvSIRcf7zGUDTDQM8="crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
 <body>
@@ -73,16 +74,18 @@
             <button v-on:click="tweetScore">Tweet your score!</button>
             <table class="table">
                 <thead>
+                <tr>
                     <th>Name</th>
                     <th>Team Name</th>
                     <th>Score</th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="player in players">
-                        <td>{{ player.name }}</td>
-                        <td>{{ player.team_name }}</td>
-                        <td>{{ player.score }}</td>
-                    </tr>
+                <tr v-for="player in players">
+                    <td>{{ player.name }}</td>
+                    <td>{{ player.team_name }}</td>
+                    <td>{{ player.score }}</td>
+                </tr>
                 </tbody>
             </table>
             <button v-on:click="showScores" :disabled="finished">Refresh</button>
