@@ -32,6 +32,7 @@ var vm = new Vue({
     el: '#app',
     data: {
         header: '',
+        instructions: '',
         location: undefined,
         date: undefined,
         weather: undefined,
@@ -161,11 +162,12 @@ var vm = new Vue({
                         vm.events = response.data.events.map(function(el) {
                             return { id: el.id, text: el.name };
                         });
-                        vm.header = "Choose The Event";
+                        vm.header = "Events";
+                        vm.instructions = "Pick your events"
                         vm.currStage = 2;
                     } else {
                         vm.error = true;
-                        vm.error_message = "Could not get Events";
+                        vm.error_message = "Unable to get events";
                     }
                 })
                 .catch(function(error) {
@@ -191,10 +193,11 @@ var vm = new Vue({
                             let event = response.data.payload[i];
                             vm.$set(vm.categories, event.eventId, { eventName: event.eventName, athletes: event.athletes });
                         }
-                        vm.header = "Choose Athletes"
+                        vm.header = "Athletes"
+                        vm.instructions = "Pick up to 10 athletes"
                     } else {
                         vm.error = true;
-                        vm.error_message = "Could not get Athletes";
+                        vm.error_message = "Unable to get athletes";
                     }
                 })
                 .catch(function(error) {

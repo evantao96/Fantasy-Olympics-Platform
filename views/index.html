@@ -39,27 +39,29 @@
         </div>
         <div v-if="location && date && weather && currStage === 2">
             <p v-if="currStage === 2">Welcome to the Fantasy Olympic Games!</p>
-            <p>It is {{ date.month }} of {{ date.year }}</p>
-            <p>The games are hosted in scenic {{ location.city }}, {{ location.country }}</p>
-            <p>It is a {{weather.clim }} climate today of {{ weather.temp }}°F and {{ weather.humd }}% humidity</p>
+            <p>It is {{ date.month }} of {{ date.year }}. The games are hosted in scenic {{ location.city }}, {{ location.country }}.</p>
+            <p>It is a {{weather.clim }} climate today of {{ weather.temp }}°F and {{ weather.humd }}% humidity.</p>
         </div>
         <div v-if="currStage === 2">
-        <p>Pick up to 10 athletes</p>
+        <h4>{{ instructions }}</h4>
             <div>
                 <select2 :options="events" v-on:input="onEventChange">
                 </select2>
             </div>
             <button v-on:click="getAthletes">Show Athletes</button>
+            <br>
+            <br>
             <div v-for="(data, eventId) in categories">
                 <h2>{{ data.eventName }}</h2>
                 <div v-for="athlete in data.athletes">
-                    <label v-bind:for="athlete.id">{{ athlete.name }}</label>
                     <input type="checkbox" v-bind:id="athlete.id" v-bind:value="{ athleteId: athlete.id, eventId: eventId }" v-model="chosenAthletes" />
+                    <label v-bind:for="athlete.id">{{ athlete.name }}</label>
                     <div>{{ athlete.bio }}</div>
                 </div>
             </div>
-            <label for="public">Can we publish your name and scores to the global leaderboard?</label>
+            <br>
             <input type="checkbox" id="public" v-model="public" />
+            <label for="public">Can we publish your name and scores to the global leaderboard?</label>
             <br>
             <button v-on:click="getScores" :disabled="chosenAthletes.length === 0">Play!</button>
         </div>
