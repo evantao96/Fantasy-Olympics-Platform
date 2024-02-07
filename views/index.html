@@ -44,7 +44,7 @@
             <p>It is a {{weather.clim }} climate today of {{ weather.temp }}°F and {{ weather.humd }}% humidity</p>
         </div>
         <div v-if="currStage === 2">
-            <p>Pick up to 10 athletes</p>
+        <p>Pick up to 10 athletes</p>
             <div>
                 <select2 :options="events" v-on:input="onEventChange">
                 </select2>

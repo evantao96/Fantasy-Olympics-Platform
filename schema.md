@@ -15,7 +15,7 @@ CREATE TABLE Athlete (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT N
 | id         | int          | NO   | PRI | NULL    | auto_increment |
 | name       | varchar(255) | NO   |     | NULL    |                |
 | country_id | varchar(3)   | YES  |     | NULL    |                |
-| bio        | varchar(255) | YES  |     | NULL    |                |
+| bio        | varchar(1000)| YES  |     | NULL    |                |
 +------------+--------------+------+-----+---------+----------------+
 
 CREATE TABLE Event (id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(255) NOT NULL);
