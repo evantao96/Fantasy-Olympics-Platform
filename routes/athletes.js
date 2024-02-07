@@ -65,19 +65,20 @@ router.post('/', function(req, res, next) {
     });
 });
 
+// AND (country_id = 'USA'
+//         OR country_id = 'URS' OR country_id = 'GBR' OR country_id = 'FRA'
+//         OR country_id = 'GER' OR country_id = 'ITA' OR country_id = 'SWE'
+//         OR country_id = 'AUS' OR country_id = 'HUN' OR country_id = 'NED'
+//         OR country_id = 'JPN' OR country_id = 'CAN' OR country_id = 'CHN'
+//         OR country_id = 'RUS' OR country_id = 'NOR' OR country_id = 'DEN'
+//         OR country_id = 'ROU' OR country_id = 'POL' OR country_id = 'KOR'
+//         OR country_id = 'ESP')
+
 var getAthletes = function(id, callback) {
     connection.query(`SELECT id, name, bio FROM Athlete
         INNER JOIN Athlete_Participates
         ON Athlete.id=Athlete_Participates.athlete_id
-        WHERE Athlete_Participates.event_id= ? AND
-        (country_id = 'USA'
-        OR country_id = 'URS' OR country_id = 'GBR' OR country_id = 'FRA'
-        OR country_id = 'GER' OR country_id = 'ITA' OR country_id = 'SWE'
-        OR country_id = 'AUS' OR country_id = 'HUN' OR country_id = 'NED'
-        OR country_id = 'JPN' OR country_id = 'CAN' OR country_id = 'CHN'
-        OR country_id = 'RUS' OR country_id = 'NOR' OR country_id = 'DEN'
-        OR country_id = 'ROU' OR country_id = 'POL' OR country_id = 'KOR'
-        OR country_id = 'ESP')
+        WHERE Athlete_Participates.event_id= ?
         AND bio <> 'N/A'
         AND Athlete.id NOT IN ( SELECT athlete_id FROM Player_Drafts_Athlete )`, [id],
         function(err, athletes, fields) {
@@ -244,13 +245,13 @@ var getScore = function(ids, callback) {
 }
 
 var getClimate = function(temp, humd) {
-    if ((temp / 60.1) > (humd / 69.5)) {
+    if ((temp / 60.1) > (humd / 50.5)) {
         if (temp > 60.1) 
             return 'hot';
         else 
             return 'cold';
     } else {
-        if (humd > 69.5) 
+        if (humd > 50.5) 
             return 'wet';
         else 
             return 'dry';
