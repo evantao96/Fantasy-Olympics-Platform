@@ -90,9 +90,9 @@ router.post('/login', function(req, res, next) {
         if (err) {
             console.log(err);
             res.send({ "success": false });
-        } else if (results[0] == null)
+        } else if (results[0] == null) // Name and team name do not match in the database
             res.send({ "success": false });
-        else {
+        else { 
             var params = {
                 TableName: "Player_Info",
                 Key: {
@@ -102,8 +102,10 @@ router.post('/login', function(req, res, next) {
             };
 
             docClient.get(params, function(err, data) {
-                if (err) {
+                if (err) { // Error getting table
                     console.error("Unable to get table. Error JSON:", JSON.stringify(err, null, 2));
+                } else if (data.Item == null) { // null results
+                    res.send({ "success": false });
                 } else if (data.Item.passwd === crypto.createHash('md5').update(req.body.lpasswd).digest('hex')) {
                     console.log("GetItem succeeded:", JSON.stringify(data, null, 2));
                     res.send({ "success": true });

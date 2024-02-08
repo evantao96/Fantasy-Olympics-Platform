@@ -23,7 +23,7 @@ def generate_options(host, database, user, password):
             print("Connected to MySQL database")
             cursor = connection.cursor()
             try: 
-                sql_query = "SELECT ID, Name FROM Athlete"
+                sql_query = "SELECT ID, Name FROM Athlete WHERE id > 20325"
                 cursor.execute(sql_query)
                 print("Successfully executed {}".format(sql_query))
                 for c in cursor: 
