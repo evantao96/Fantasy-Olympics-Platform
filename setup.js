@@ -1,9 +1,10 @@
 var AWS = require("aws-sdk")
 
 AWS.config.update({
-    accessKeyId: "AKIAU6GDZDU3SZAKDKZB",
-    secretAccessKey: "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",
-    region: "us-east-1"
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+    sessionToken: process.env.AWS_SESSION_TOKEN,
+    region: "us-east-2"
 });
 
 const dynamoDB = new AWS.DynamoDB({ region: "us-east-1" })
